@@ -79,7 +79,10 @@ class IrcClient
                 // $host = $nicka[1];
                 // $nick = $nickc[1];
 
-                $rawcmd = explode(':', $ex[3]);
+                $rawcmd = [];
+                if (isset($ex[3])) {
+                    $rawcmd = explode(':', $ex[3]);
+                }
                 if (isset($rawcmd[1]) && substr($rawcmd[1], 0, 1) == '!') {
                     $command = $rawcmd[1];
                     $args = null;

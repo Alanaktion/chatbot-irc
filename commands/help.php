@@ -1,7 +1,6 @@
 <?php
 return function (IrcClient $client, string $args, string $channel) {
-    $params = explode(' ', $args);
-    if (empty($params)) {
+    if (!$args) {
 
         // Show command list
         $list = scandir(__DIR__);
@@ -26,11 +25,11 @@ return function (IrcClient $client, string $args, string $channel) {
     } else {
 
         // Show single command help
-        $file = dirname(__DIR__) . "/command-help/{$params[0]}.txt";
+        $file = dirname(__DIR__) . "/command-help/{$args}.txt";
         if (is_file($file)) {
             return rtrim(file_get_contents($file));
         } else {
-            return "Help is not available for {$params[0]}. Try running the command without any parameters.";
+            return "Help is not available for {$args}. Try running the command without any parameters.";
         }
     }
 };

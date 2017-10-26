@@ -66,7 +66,7 @@ class IrcClient
             while ($data = fgets($this->socket)) {
                 echo $data;
 
-                $ex = explode(' ', $data);
+                $ex = explode(' ', rtrim($data, "\n"));
                 if ($ex[0] == 'PING') {
                     $this->write("PONG {$ex[1]}");
                     continue;
@@ -79,18 +79,14 @@ class IrcClient
                 // $host = $nicka[1];
                 // $nick = $nickc[1];
 
-                $rawcmd = [];
-                if (isset($ex[3])) {
-                    $rawcmd = explode(':', $ex[3]);
-                }
-                if (isset($rawcmd[1]) && substr($rawcmd[1], 0, 1) == '!') {
-                    $command = $rawcmd[1];
+                if ($ex[1] == 'PRIVMSG' && @$ex[3]{1} == '!') {
+                    $command = ltrim($ex[3], ':!');
                     $args = '';
                     for ($i = 4; $i < count($ex); $i++) {
                         $args .= $ex[$i] . ' ';
                     }
                     $channel = $ex[2];
-                    $this->command(ltrim($command, '!'), $args, $channel);
+                    $this->command(trim($command), trim($args), $channel);
                 }
             }
         }
@@ -151,6 +147,7 @@ class IrcClient
                 $this->message("ERR: " . $e->getMessage(), $channel);
             }
         } else {
+            print_r([$command,$args,$channel]);
             echo "Command not found: $command\n";
         }
         return false;
@@ -162,7 +159,7 @@ class IrcClient
      * @param string $command
      * @return string
      */
-    protected function findCommand(string $command): string
+    protected function findCommand(string $command): ?string
     {
         $root = dirname(__DIR__) . '/commands/';
         if (isset($this->config['aliases'][$command])) {

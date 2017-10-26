@@ -1,2 +1,2 @@
-Usage: #fail <who failed>
+Usage: !fail <who failed>
 Calculates the fail level of a person who failed.

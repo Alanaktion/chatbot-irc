@@ -1,2 +1,2 @@
-Usage: #catfacts [num]
+Usage: !catfacts [num]
 Get a random cat fact!

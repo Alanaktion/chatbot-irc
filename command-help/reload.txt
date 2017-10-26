@@ -1,2 +1,2 @@
-Usage: #reload
+Usage: !reload
 Reloads bot configuration.

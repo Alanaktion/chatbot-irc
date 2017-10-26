@@ -1,2 +1,2 @@
-Usage: #backwards <words, yo>
+Usage: !backwards <words, yo>
 Prints back the string in reverse order.

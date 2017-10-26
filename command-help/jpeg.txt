@@ -1,2 +1,2 @@
-Usage: #jpeg <search terms>
+Usage: !jpeg <search terms>
 Google's a random image for the terms, then more jpegs it.

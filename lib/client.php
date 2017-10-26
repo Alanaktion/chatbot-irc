@@ -85,7 +85,7 @@ class IrcClient
                 }
                 if (isset($rawcmd[1]) && substr($rawcmd[1], 0, 1) == '!') {
                     $command = $rawcmd[1];
-                    $args = null;
+                    $args = '';
                     for ($i = 4; $i < count($ex); $i++) {
                         $args .= $ex[$i] . ' ';
                     }

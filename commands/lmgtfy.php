@@ -1,8 +1,8 @@
 <?php
 return function (IrcClient $client, string $args, string $channel) {
-    if (empty($params)) {
+    if (!$args) {
         return "Usage: !lmgtfy <query>";
     } else {
-        return "http://lmgtfy.com/?q=" . urlencode(implode(" ", $params));
+        return "http://lmgtfy.com/?q=" . urlencode($args);
     }
 };

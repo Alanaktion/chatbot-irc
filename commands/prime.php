@@ -1,5 +1,6 @@
 <?php
 return function (IrcClient $client, string $args, string $channel) {
+    $params = explode(' ', $args);
     if (!empty($params[0]) && intval($params[0]) > 0) {
         $n = intval($params[0]);
 

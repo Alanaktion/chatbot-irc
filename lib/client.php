@@ -5,6 +5,7 @@ class IrcClient
 {
     protected $socket;
     protected $config;
+    protected $lastCommand;
 
     /**
      * Create client instance and connect to server
@@ -32,7 +33,13 @@ class IrcClient
         $this->write("USER $nick 0 * :$nick");
         $this->nick($nick);
         if (!empty($config['channel'])) {
-            $this->join($config['channel']);
+            if (is_array($config['channel'])) {
+                foreach ($config['channel'] as $channel) {
+                    $this->join($channel);
+                }
+            } else {
+                $this->join($config['channel']);
+            }
         }
     }
 
@@ -80,13 +87,25 @@ class IrcClient
                 // $nick = $nickc[1];
 
                 if ($ex[1] == 'PRIVMSG' && @$ex[3]{1} == '!') {
-                    $command = ltrim($ex[3], ':!');
-                    $args = '';
-                    for ($i = 4; $i < count($ex); $i++) {
-                        $args .= $ex[$i] . ' ';
-                    }
                     $channel = $ex[2];
-                    $this->command(trim($command), trim($args), $channel);
+                    if (ltrim($ex[3], ':') == '!!') {
+                        echo "!!\n";
+                        if (isset($this->lastCommand[$channel])) {
+                            $last = $lastCommand[$channel];
+                            echo "Running last command: {$last[0]}\n";
+                            $this->command($last[0], $last[1], $channel);
+                        } else {
+                            echo "No previous command\n";
+                            $this->message('No previous command.', $channel);
+                        }
+                    } else {
+                        $command = ltrim($ex[3], ':!');
+                        $args = '';
+                        for ($i = 4; $i < count($ex); $i++) {
+                            $args .= $ex[$i] . ' ';
+                        }
+                        $this->command(trim($command), trim($args), $channel);
+                    }
                 }
             }
         }
@@ -134,13 +153,18 @@ class IrcClient
             return false;
         }
 
+        $this->lastCommand[$channel] = [$command, $args];
+
         $file = $this->findCommand($command);
         if ($file) {
             $fn = require($file);
             try {
                 $result = $fn($this, $args, $channel);
                 if ($result !== null) {
-                    $this->message($result, $channel);
+                    $lines = explode("\n", trim($result, "\n"));
+                    foreach ($lines as $line) {
+                        $this->message($line, $channel);
+                    }
                 }
                 return true;
             } catch (Exception $e) {

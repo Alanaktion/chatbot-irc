@@ -1,5 +1,6 @@
 <?php
 return function (IrcClient $client, string $args, string $channel) {
+	$params = explode(' ', $args);
     if (isset($params[1])) {
         shuffle($params);
         return implode(" ", $params);

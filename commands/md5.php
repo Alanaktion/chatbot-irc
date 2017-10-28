@@ -1,8 +1,8 @@
 <?php
 return function (IrcClient $client, string $args, string $channel) {
-    if (empty($params)) {
+    if (!$args) {
         return "Usage: !md5 <string>";
     } else {
-        return md5(implode(" ", $params));
+        return md5($args);
     }
 };

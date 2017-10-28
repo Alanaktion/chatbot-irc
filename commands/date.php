@@ -1,8 +1,8 @@
 <?php
 return function (IrcClient $client, string $args, string $channel) {
-    if (!empty($params)) {
+    if ($args) {
         date_default_timezone_set(TZ);
-        $str = date(implode(" ", $params));
+        $str = date($args);
 		date_default_timezone_set("UTC");
 		return $str;
     } else {

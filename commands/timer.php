@@ -10,6 +10,7 @@ return function (IrcClient $client, string $args, string $channel) {
         $str = sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
     }
 
+    $params = explode(' ', $args);
     if (empty($params[0])) {
         if (!empty($timer)) {
             return "Timer running: $str";

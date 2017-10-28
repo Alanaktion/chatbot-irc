@@ -44,6 +44,7 @@ if (!function_exists("cidr2netmask")) {
 }
 
 return function (IrcClient $client, string $args, string $channel) {
+    $params = explode(' ', $args);
     if (is_file('/usr/bin/ipcalc')) {
         if (!empty($params[0])) {
             $options = preg_replace('/[^0-9a-z\/\. -]/', '', $params[0]);

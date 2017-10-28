@@ -141,14 +141,13 @@ if (!function_exists("number_format_huge")) {
 }
 
 return function (IrcClient $client, string $args, string $channel) {
-    if (!empty($params[0])) {
-        $param_str = implode(" ", $params);
-        if (strlen($param_str) > 6) {
-            $numerator = factorial(strlen($param_str));
+    if ($args) {
+        if (strlen($args) > 6) {
+            $numerator = factorial(strlen($args));
             $denominator = 1;
 
             // Check for duplicate characters
-            $duplicates = array_count_values(str_split($param_str));
+            $duplicates = array_count_values(str_split($args));
             foreach ($duplicates as $char=>$count) {
                 if ($count > 1) {
                     $denominator = $denominator * factorial($count);
@@ -160,7 +159,7 @@ return function (IrcClient $client, string $args, string $channel) {
 
             return "That word has an estimated " . number_format_huge($numerator) . " permutations and " . number_format_huge($exact) . " unique permutations. That's a lot.";
         } else {
-            return implode(", ", permute($param_str));
+            return implode(", ", permute($args));
         }
     } else {
         return "Usage: !permute <word>";

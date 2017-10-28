@@ -1,5 +1,6 @@
 <?php
 return function (IrcClient $client, string $args, string $channel) {
+	$params = explode(' ', $args);
     if (!empty($params) && count($params) > 1) {
         return $params[array_rand($params)];
     } else {

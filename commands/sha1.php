@@ -1,8 +1,8 @@
 <?php
 return function (IrcClient $client, string $args, string $channel) {
-    if (empty($params)) {
+    if (!$args) {
         return "Usage: !sha1 <string>";
     } else {
-        return sha1(implode(" ", $params));
+        return sha1($args);
     }
 };

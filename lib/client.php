@@ -64,11 +64,29 @@ class IrcClient
     }
 
     /**
+     * Quit the bot
+     * @return void
+     */
+    public function quit(): void
+    {
+        echo "Shutting down...\n";
+        fclose($this->socket);
+        exit;
+    }
+
+    /**
      * Listen for incoming commands
      * @return void
      */
     public function run(): void
     {
+        declare (ticks = 1);
+        if (function_exists('pcntl_signal')) {
+            pcntl_signal(SIGINT, [$this, 'quit']);
+            pcntl_signal(SIGTERM, [$this, 'quit']);
+        }
+        gc_enable();
+
         while (true) {
             while ($data = fgets($this->socket)) {
                 echo $data;
